@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tier One Asset Management — Client Portal</title>
+<style>
+/* ============================================
+   FONT DECLARATIONS
+   ============================================ */
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Thin.otf') format('opentype'); font-weight: 100; font-style: normal; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Extralight.otf') format('opentype'); font-weight: 200; font-style: normal; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Light.otf') format('opentype'); font-weight: 300; font-style: normal; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; }
+@font-face { font-family: 'Signifier'; src: url('Signifier Font/Signifier-Black.otf') format('opentype'); font-weight: 900; font-style: normal; }
+
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterLight.otf') format('opentype'); font-weight: 300; font-style: normal; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterLightItalic.otf') format('opentype'); font-weight: 300; font-style: italic; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterRegular.otf') format('opentype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterRegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterMedium.otf') format('opentype'); font-weight: 500; font-style: normal; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterSemiBold.otf') format('opentype'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterBold.otf') format('opentype'); font-weight: 700; font-style: normal; }
+@font-face { font-family: 'Matter'; src: url('Matter Font/MatterHeavy.otf') format('opentype'); font-weight: 800; font-style: normal; }
+
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  --white: #FFFFFF;
+  --black: #111111;
+  --deep-blue: #1B3A5C;
+  --deep-blue-light: #2A5580;
+  --pastel-yellow: #FFF8DC;
+  --pastel-yellow-strong: #FFFACD;
+  --pastel-yellow-border: #F0E6B8;
+  --gray-50: #F7F7F7;
+  --gray-100: #EFEFEF;
+  --gray-200: #E0E0E0;
+  --gray-300: #CCCCCC;
+  --gray-400: #999999;
+  --gray-500: #6E6E6E;
+  --gray-600: #525252;
+  --gray-700: #3D3D3D;
+  --green: #2E7D32;
+  --green-light: #E8F5E9;
+  --red: #C62828;
+  --red-light: #FFEBEE;
+  --amber: #E6890E;
+  --amber-light: #FFF8E1;
+  --font-title: 'Signifier', 'Georgia', serif;
+  --font-body: 'Matter', 'Helvetica Neue', sans-serif;
+  --max-width: 1280px;
+  --header-height: 72px;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   SCROLL ANIMATIONS
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+}
+
+section {
+  padding: 64px 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+section:last-of-type { border-bottom: none; }
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.section-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: 32px;
+  color: var(--deep-blue);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--gray-600);
+  margin-bottom: 40px;
+}
+
+h3 {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--deep-blue);
+  line-height: 1.3;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  font-family: var(--font-title);
+  font-weight: 300;
+  font-size: 22px;
+  color: var(--deep-blue);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.header-date {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.header-client {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 6px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 40px;
+  cursor: default;
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--deep-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--white);
+}
+
+.header-client-name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--black);
+}
+
+.header-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.header-nav a {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--gray-600);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+  color: var(--deep-blue);
+  background: var(--gray-50);
+}
+
+@media (max-width: 768px) {
+  .header-inner { padding: 0 20px; }
+  .header-brand { font-size: 17px; }
+  .header-nav { display: none; }
+  .header-date { display: none; }
+}
+
+@media (max-width: 480px) {
+  .header-client-name { display: none; }
+}
+
+/* ============================================
+   HERO / WELCOME BANNER
+   ============================================ */
+.hero {
+  margin-top: var(--header-height);
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.hero-greeting {
+  font-family: var(--font-title);
+  font-weight: 300;
+  font-size: 42px;
+  color: var(--deep-blue);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.hero-summary {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--black);
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+
+.hero-stat-value {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--deep-blue);
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 40px 0 32px; }
+  .hero-greeting { font-size: 30px; }
+  .hero-meta { flex-wrap: wrap; gap: 20px; }
+}
+
+/* ============================================
+   ACTION ITEMS
+   ============================================ */
+.action-items-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--pastel-yellow);
+  border: 1px solid var(--pastel-yellow-border);
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.action-card:hover {
+  border-color: #E0D89E;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.action-card.completed {
+  opacity: 0.55;
+  background: var(--gray-50);
+  border-color: var(--gray-200);
+}
+
+.action-card.completed .action-text {
+  text-decoration: line-through;
+  color: var(--gray-500);
+}
+
+.action-card.waiting {
+  background: var(--white);
+  border: 1px dashed var(--gray-300);
+}
+
+.action-checkbox {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--deep-blue);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.action-checkbox.checked {
+  background: var(--deep-blue);
+}
+
+.action-checkbox.checked svg { opacity: 1; }
+
+.action-checkbox svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.action-waiting-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  animation: pulse-subtle 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.action-waiting-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.action-content { flex: 1; }
+
+.action-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--black);
+  line-height: 1.5;
+}
+
+.action-meta {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+
+/* ============================================
+   PORTFOLIO OVERVIEW
+   ============================================ */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+}
+
+.portfolio-card {
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 20px 24px;
+  transition: all 0.25s ease;
+  background: var(--white);
+}
+
+.portfolio-card:hover {
+  border-color: var(--gray-300);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+
+.portfolio-card.watchlist {
+  background: var(--gray-50);
+  border-style: dashed;
+  grid-column: 1 / -1;
+}
+
+.portfolio-card-header {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--deep-blue);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--gray-200);
+  letter-spacing: 0.2px;
+}
+
+.portfolio-card.watchlist .portfolio-card-header {
+  color: var(--gray-600);
+}
+
+.portfolio-holdings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.holding {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.holding:hover {
+  background: var(--white);
+  border-color: var(--gray-300);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.watchlist .holding {
+  background: var(--white);
+  opacity: 0.75;
+}
+
+.watchlist .holding:hover { opacity: 1; }
+
+.holding-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.holding-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.holding-ticker {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--black);
+}
+
+.holding-name {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 11px;
+  color: var(--gray-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+/* ============================================
+   ASSETS & ACCOUNTS
+   ============================================ */
+.net-worth-banner {
+  text-align: center;
+  padding: 40px;
+  background: linear-gradient(135deg, var(--deep-blue) 0%, #2A5580 100%);
+  border-radius: 14px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.net-worth-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.net-worth-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+}
+
+.net-worth-value {
+  font-family: var(--font-title);
+  font-weight: 300;
+  font-size: 52px;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+
+.net-worth-note {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .net-worth-value { font-size: 36px; }
+  .net-worth-banner { padding: 28px 20px; }
+}
+
+.accounts-header {
+  margin-bottom: 20px;
+}
+
+.accounts-header h3 { margin: 0; }
+
+.accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.account-card {
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 20px;
+  background: var(--white);
+  transition: all 0.25s ease;
+}
+
+.account-card:hover {
+  border-color: var(--gray-300);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+
+.account-type-badge {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.account-type-badge.investment {
+  background: #E3F2FD;
+  color: #1565C0;
+}
+.account-type-badge.retirement {
+  background: #F3E5F5;
+  color: #7B1FA2;
+}
+.account-type-badge.brokerage {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.account-name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--black);
+  margin-bottom: 2px;
+}
+
+.account-institution {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-bottom: 14px;
+}
+
+.account-value {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--deep-blue);
+}
+
+/* ============================================
+   EXPENSES & BUDGET
+   ============================================ */
+.budget-deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--amber-light);
+  border: 1px solid #FFE082;
+  border-radius: 8px;
+  margin-bottom: 32px;
+}
+
+.budget-deadline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.budget-deadline-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  color: #6D4C00;
+}
+
+.budget-framework {
+  margin-bottom: 40px;
+}
+
+.budget-bar-container {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 40px;
+  margin-bottom: 12px;
+}
+
+.budget-bar-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  transition: flex 0.5s ease;
+}
+
+.budget-bar-segment.needs {
+  flex: 60;
+  background: var(--deep-blue);
+  color: var(--white);
+}
+
+.budget-bar-segment.wants {
+  flex: 20;
+  background: var(--pastel-yellow-strong);
+  color: #6D5F00;
+}
+
+.budget-bar-segment.savings {
+  flex: 20;
+  background: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.budget-bar-labels {
+  display: flex;
+  gap: 24px;
+}
+
+.budget-bar-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.budget-bar-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.expense-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .expense-sections { grid-template-columns: 1fr; }
+}
+
+.expense-section {
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.expense-section-header {
+  padding: 16px 20px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expense-section-title {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--deep-blue);
+}
+
+.expense-section-total {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--deep-blue);
+}
+
+.expense-items {
+  padding: 8px 0;
+}
+
+.expense-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  transition: background 0.15s ease;
+}
+
+.expense-row:hover { background: var(--gray-50); }
+
+.expense-label {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--black);
+}
+
+.expense-amount {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--black);
+}
+
+.expense-cta {
+  padding: 14px 20px;
+  border-top: 1px solid var(--gray-100);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* ============================================
+   ROADMAP
+   ============================================ */
+.roadmap-section {
+  opacity: 0.75;
+}
+
+.roadmap-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.roadmap-item {
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.roadmap-item:hover {
+  border-color: var(--gray-300);
+}
+
+.roadmap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: var(--gray-50);
+  transition: background 0.2s ease;
+}
+
+.roadmap-header:hover { background: var(--gray-100); }
+
+.roadmap-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roadmap-number {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--gray-200);
+  color: var(--gray-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roadmap-title {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--gray-700);
+}
+
+.roadmap-chevron {
+  width: 20px;
+  height: 20px;
+  color: var(--gray-400);
+  transition: transform 0.3s ease;
+}
+
+.roadmap-item.open .roadmap-chevron {
+  transform: rotate(180deg);
+}
+
+.roadmap-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.roadmap-item.open .roadmap-body {
+  max-height: 200px;
+}
+
+.roadmap-body-inner {
+  padding: 16px 20px 20px 56px;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.footer-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.footer-brand {
+  font-family: var(--font-title);
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--gray-400);
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">Tier One Asset Management</div>
+    <nav class="header-nav">
+      <a href="#actions" class="active">Actions</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#accounts">Accounts</a>
+      <a href="#budget">Budget</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+    <div class="header-right">
+      <span class="header-date">February 23, 2026</span>
+      <div class="header-client">
+        <div class="header-avatar">AA</div>
+        <span class="header-client-name">Dr. A. Altayeh</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+  <div class="container">
+    <h1 class="hero-greeting reveal">Welcome back, Dr. Altayeh</h1>
+    <p class="hero-summary reveal reveal-delay-1">Your consolidated financial overview — investments, accounts, and action items managed by Tier One Asset Management.</p>
+    <div class="hero-meta reveal reveal-delay-2">
+      <div class="hero-stat">
+        <span class="hero-stat-label">Last Consultation</span>
+        <span class="hero-stat-value">Feb 21, 2026</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Next Review</span>
+        <span class="hero-stat-value">Mar 7, 2026</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Open Items</span>
+        <span class="hero-stat-value">3</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ACTION ITEMS ===================== -->
+<section id="actions">
+  <div class="container">
+    <div class="section-label reveal">This Week</div>
+    <h2 class="section-title reveal">Action Items</h2>
+    <p class="section-subtitle reveal">Priority tasks to complete before the next review meeting.</p>
+    <div class="action-items-grid" id="action-items-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PORTFOLIO ===================== -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-label reveal">Investment Thesis</div>
+    <h2 class="section-title reveal">Portfolio Overview</h2>
+    <p class="section-subtitle reveal">Holdings organized by strategic investment thesis. Sharia-compliant screening in progress.</p>
+    <div class="portfolio-grid" id="portfolio-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ASSETS & ACCOUNTS ===================== -->
+<section id="accounts">
+  <div class="container">
+    <div class="section-label reveal">Financial Snapshot</div>
+    <h2 class="section-title reveal">Assets and Accounts</h2>
+    <p class="section-subtitle reveal">Current estimated account balances. Values will be updated as accurate statements are received.</p>
+
+    <div class="net-worth-banner reveal">
+      <div class="net-worth-label">Estimated Net Worth</div>
+      <div class="net-worth-value" id="net-worth-display">--</div>
+      <div class="net-worth-note">Based on preliminary estimates</div>
+    </div>
+
+    <div class="accounts-header reveal">
+      <h3>Accounts</h3>
+    </div>
+
+    <div class="accounts-grid" id="accounts-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXPENSES & BUDGET ===================== -->
+<section id="budget">
+  <div class="container">
+    <div class="section-label reveal">Cash Flow</div>
+    <h2 class="section-title reveal">Expenses and Budget</h2>
+    <p class="section-subtitle reveal">Monthly household expenses, tuition, and charitable giving against the 60/20/20 framework.</p>
+
+    <div class="budget-deadline reveal">
+      <span class="budget-deadline-dot"></span>
+      <span class="budget-deadline-text">Deadline: 3 weeks — Awaiting detailed breakdown from client and spouse</span>
+    </div>
+
+    <div class="budget-framework reveal">
+      <div class="budget-bar-container">
+        <div class="budget-bar-segment needs">60% Needs</div>
+        <div class="budget-bar-segment wants">20% Wants</div>
+        <div class="budget-bar-segment savings">20% Savings</div>
+      </div>
+      <div class="budget-bar-labels">
+        <div class="budget-bar-label">
+          <span class="budget-bar-dot" style="background: var(--deep-blue);"></span>
+          Needs — Housing, utilities, groceries, insurance
+        </div>
+        <div class="budget-bar-label">
+          <span class="budget-bar-dot" style="background: var(--pastel-yellow-strong); border: 1px solid var(--pastel-yellow-border);"></span>
+          Wants — Discretionary, dining, travel
+        </div>
+        <div class="budget-bar-label">
+          <span class="budget-bar-dot" style="background: var(--gray-200);"></span>
+          Savings — Investments, DCA, emergency fund
+        </div>
+      </div>
+    </div>
+
+    <div class="expense-sections reveal" id="expense-sections">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FUTURE ROADMAP ===================== -->
+<section id="roadmap" class="roadmap-section">
+  <div class="container">
+    <div class="section-label reveal">Upcoming Phases</div>
+    <h2 class="section-title reveal" style="opacity: 0.6;">Future Roadmap</h2>
+    <p class="section-subtitle reveal" style="opacity: 0.6;">These are the strategic initiatives we will work toward together. Do not worry — we will start slowly and build from here.</p>
+    <div class="roadmap-items reveal" id="roadmap-items">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-brand">Tier One Asset Management</div>
+    <div class="footer-text">Confidential. For authorized use only.</div>
+  </div>
+</footer>
+
+<script>
+/* ============================================
+   DATA
+   ============================================ */
+
+const actionItems = [
+  { id: 'a1', text: 'Open a Charles Schwab account and set up a Donor Advised Fund (DAF)', meta: 'Priority — Current tax year deadline', done: false, type: 'task' },
+  { id: 'a2', text: 'Sign up for Rocket Money and connect all brokerage accounts (Chase, Voya, Fidelity, Empower)', meta: 'Link all accounts for consolidated budgeting view', done: false, type: 'task' },
+  { id: 'a3', text: 'Awaiting from Sister Ibtisam: Monthly household expenses breakdown and annualized tuition/donation budgets', meta: 'Required before budget modeling can begin', done: false, type: 'waiting' }
+];
+
+const accounts = [
+  { name: 'Empower 401(k)', institution: 'Empower / Mercy Health', value: 187500, type: 'retirement' },
+  { name: 'Voya 403(b)', institution: 'Voya / Sterling CGH Hospital', value: 142300, type: 'retirement' },
+  { name: 'Chase Managed Portfolios', institution: 'J.P. Morgan / Chase', value: 523800, type: 'investment' },
+  { name: 'Chase Investment Account', institution: 'J.P. Morgan / Chase', value: 89400, type: 'brokerage' },
+  { name: 'Fidelity Brokerage', institution: 'Fidelity Investments', value: 312600, type: 'brokerage' }
+];
+
+const expenses = {
+  monthly: [
+    { label: 'Housing / Mortgage', value: 3500 },
+    { label: 'Utilities', value: 450 },
+    { label: 'Groceries', value: 1200 },
+    { label: 'Transportation', value: 800 },
+    { label: 'Insurance', value: 600 },
+    { label: 'Healthcare', value: 400 },
+    { label: 'Miscellaneous', value: 550 }
+  ],
+  tuition: [
+    { label: 'UIC (Usama)', value: 28000 },
+    { label: 'Auburn (Ibrahim)', value: 32000 },
+    { label: 'Dual-Credit RBC', value: 5000 }
+  ],
+  donations: [
+    { label: 'Zakat', value: 50000 },
+    { label: 'Mosque / School', value: 12000 },
+    { label: 'Islamic Relief', value: 6000 },
+    { label: 'CAIR Foundation', value: 4000 },
+    { label: 'Other Charitable', value: 3000 }
+  ]
+};
+
+const brandColors = {
+  AAPL:'#555555', TAVHY:'#E31E24', PAC:'#003DA5', UBER:'#000000', META:'#0668E1',
+  RDDT:'#FF4500', APP:'#1A6DFF', MAR:'#B80028', BKNG:'#003580', TOST:'#FF6B35',
+  MNST:'#95D600', TSM:'#C00000', ASML:'#00529B', GOOGL:'#4285F4', TSLA:'#CC0000',
+  AMZN:'#FF9900', BTC:'#F7931A', GLD:'#B8860B', INTU:'#365EBF', SPGI:'#CC2529',
+  MCO:'#002B5C', HIMS:'#C4956A', DASH:'#FF3008', LLY:'#D52B1E', NVO:'#001F5B',
+  ABBV:'#071D49', V:'#1A1F71', MA:'#EB001B', WM:'#00843D', PG:'#003DA5',
+  BBY:'#0046BE', MSCI:'#003B71', CME:'#00A650', CBOE:'#1F3C6E', SN:'#222222', FIX:'#1E4D8C'
+};
+
+const portfolioCategories = [
+  { name: 'Apple', holdings: [{ ticker: 'AAPL', name: 'Apple Inc.', letter: 'A' }] },
+  { name: 'International Hubs', holdings: [
+    { ticker: 'TAVHY', name: 'TAV Airport Holdings', letter: 'T' },
+    { ticker: 'PAC', name: 'Grupo Aeroportuario', letter: 'G' }
+  ]},
+  { name: 'Autonomous Vehicles', holdings: [{ ticker: 'UBER', name: 'Uber Technologies', letter: 'U' }] },
+  { name: 'Advertising', holdings: [
+    { ticker: 'META', name: 'Meta Platforms', letter: 'M' },
+    { ticker: 'RDDT', name: 'Reddit Inc.', letter: 'R' },
+    { ticker: 'APP', name: 'AppLovin Corp.', letter: 'A' }
+  ]},
+  { name: 'Asset-Light Hotel Demand', holdings: [
+    { ticker: 'MAR', name: 'Marriott International', letter: 'M' },
+    { ticker: 'BKNG', name: 'Booking Holdings', letter: 'B' }
+  ]},
+  { name: 'Small Business & Gen Z', holdings: [{ ticker: 'TOST', name: 'Toast Inc.', letter: 'T' }] },
+  { name: 'Asset-Light Beverage', holdings: [{ ticker: 'MNST', name: 'Monster Beverage', letter: 'M' }] },
+  { name: 'Global Chip Infrastructure', holdings: [
+    { ticker: 'TSM', name: 'TSMC', letter: 'T' },
+    { ticker: 'ASML', name: 'ASML Holding', letter: 'A' }
+  ]},
+  { name: 'AI Race — Frontier Models', holdings: [{ ticker: 'GOOGL', name: 'Alphabet Inc.', letter: 'G' }] },
+  { name: 'Humanoids', holdings: [
+    { ticker: 'TSLA', name: 'Tesla Inc.', letter: 'T' },
+    { ticker: 'AMZN', name: 'Amazon.com', letter: 'A' }
+  ]},
+  { name: 'Inflation Hedges', holdings: [
+    { ticker: 'BTC', name: 'Bitcoin', letter: 'B' },
+    { ticker: 'GLD', name: 'SPDR Gold Shares', letter: 'G' }
+  ]},
+  { name: 'SaaS', holdings: [
+    { ticker: 'INTU', name: 'Intuit Inc.', letter: 'I' },
+    { ticker: 'SPGI', name: "S&P Global", letter: 'S' },
+    { ticker: 'MCO', name: "Moody's Corp.", letter: 'M' }
+  ]},
+  { name: 'Gen Z Growth', holdings: [
+    { ticker: 'HIMS', name: 'Hims & Hers Health', letter: 'H' },
+    { ticker: 'DASH', name: 'DoorDash', letter: 'D' }
+  ]},
+  { name: 'Healthcare', holdings: [
+    { ticker: 'LLY', name: 'Eli Lilly', letter: 'E' },
+    { ticker: 'NVO', name: 'Novo Nordisk', letter: 'N' },
+    { ticker: 'ABBV', name: 'AbbVie Inc.', letter: 'A' }
+  ]},
+  { name: 'High-Margin Payments', holdings: [
+    { ticker: 'V', name: 'Visa Inc.', letter: 'V' },
+    { ticker: 'MA', name: 'Mastercard', letter: 'M' }
+  ]},
+  { name: 'Defensive', holdings: [
+    { ticker: 'WM', name: 'Waste Management', letter: 'W' },
+    { ticker: 'PG', name: 'Procter & Gamble', letter: 'P' }
+  ]},
+  { name: 'Dividends', holdings: [{ ticker: 'BBY', name: 'Best Buy Co.', letter: 'B' }] }
+];
+
+const watchlist = {
+  name: 'Watchlist',
+  holdings: [
+    { ticker: 'MSCI', name: 'MSCI Inc.', letter: 'M' },
+    { ticker: 'CME', name: 'CME Group', letter: 'C' },
+    { ticker: 'CBOE', name: 'Cboe Global Markets', letter: 'C' },
+    { ticker: 'SN', name: 'SharkNinja Inc.', letter: 'S' },
+    { ticker: 'FIX', name: 'Comfort Systems USA', letter: 'C' },
+    { ticker: 'DASH', name: 'DoorDash', letter: 'D' }
+  ]
+};
+
+const roadmapItems = [
+  { title: 'Phased transfer in kind of holdings', body: 'Coordinate with custodians to execute in-kind transfers of existing holdings to the consolidated Schwab platform, preserving cost basis and avoiding unnecessary taxable events.' },
+  { title: 'Tax-loss harvesting for non-compliant positions', body: 'Gradually exit positions that do not meet Sharia or ethical screening criteria over multiple tax years, using tax-loss harvesting to offset realized gains where possible.' },
+  { title: 'Gifting appreciated shares via DAF for zakat', body: 'Identify highly appreciated, long-held shares (e.g., Nvidia, Google, Meta) and donate them directly to the DAF to fulfill zakat obligations while avoiding capital gains taxes and maximizing the charitable deduction.' },
+  { title: 'Centralized reporting dashboard', body: 'Map account ownership across spouses and sub-accounts into a single reporting view. Negotiate or terminate redundant external management mandates to prevent conflicting trades and overlapping fees.' },
+  { title: 'Cash-flow forecast with retirement glidepath', body: 'Build a comprehensive cash-flow model integrating variable W-2 income, planned donations, tuition payments, and rental income streams. Link projections to a retirement glidepath targeting age 65.' },
+  { title: 'Social Security optimization', body: 'Analyze optimal Social Security claiming strategy post-children\'s graduations, modeling spousal benefits, delayed filing credits, and withdrawal sequencing from tax-advantaged accounts.' }
+];
+
+/* ============================================
+   RENDER FUNCTIONS
+   ============================================ */
+
+function formatCurrency(n) {
+  if (n === undefined || n === null || isNaN(n)) return '$0';
+  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+function renderActionItems() {
+  const grid = document.getElementById('action-items-grid');
+  grid.innerHTML = '';
+  actionItems.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'action-card reveal' + (item.done ? ' completed' : '') + (item.type === 'waiting' ? ' waiting' : '');
+    card.style.transitionDelay = (i * 0.08) + 's';
+
+    if (item.type === 'waiting') {
+      card.innerHTML = `
+        <div class="action-waiting-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="action-content">
+          <div class="action-text">${item.text}</div>
+          <div class="action-meta">${item.meta}</div>
+        </div>`;
+    } else {
+      card.innerHTML = `
+        <div class="action-checkbox${item.done ? ' checked' : ''}" data-id="${item.id}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="4 12 10 18 20 6"/></svg>
+        </div>
+        <div class="action-content">
+          <div class="action-text">${item.text}</div>
+          <div class="action-meta">${item.meta}</div>
+        </div>`;
+    }
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll('.action-checkbox').forEach(cb => {
+    cb.addEventListener('click', () => {
+      const id = cb.dataset.id;
+      const item = actionItems.find(a => a.id === id);
+      if (item) {
+        item.done = !item.done;
+        renderActionItems();
+        triggerReveal();
+      }
+    });
+  });
+}
+
+function renderPortfolio() {
+  const grid = document.getElementById('portfolio-grid');
+  grid.innerHTML = '';
+
+  portfolioCategories.forEach((cat, i) => {
+    const card = document.createElement('div');
+    card.className = 'portfolio-card reveal';
+    card.style.transitionDelay = (i * 0.04) + 's';
+
+    let holdingsHTML = cat.holdings.map(h => `
+      <div class="holding">
+        <div class="holding-icon" style="background: ${brandColors[h.ticker] || '#555'};">${h.letter}</div>
+        <div class="holding-info">
+          <span class="holding-ticker">${h.ticker}</span>
+          <span class="holding-name">${h.name}</span>
+        </div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="portfolio-card-header">${cat.name}</div>
+      <div class="portfolio-holdings">${holdingsHTML}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const wCard = document.createElement('div');
+  wCard.className = 'portfolio-card watchlist reveal';
+
+  let wHoldings = watchlist.holdings.map(h => `
+    <div class="holding">
+      <div class="holding-icon" style="background: ${brandColors[h.ticker] || '#555'};">${h.letter}</div>
+      <div class="holding-info">
+        <span class="holding-ticker">${h.ticker}</span>
+        <span class="holding-name">${h.name}</span>
+      </div>
+    </div>
+  `).join('');
+
+  wCard.innerHTML = `
+    <div class="portfolio-card-header">Watchlist</div>
+    <div class="portfolio-holdings">${wHoldings}</div>
+  `;
+  grid.appendChild(wCard);
+}
+
+function renderAccounts() {
+  const grid = document.getElementById('accounts-grid');
+  grid.innerHTML = '';
+
+  accounts.forEach((acc, i) => {
+    const card = document.createElement('div');
+    card.className = 'account-card reveal';
+    card.style.transitionDelay = (i * 0.06) + 's';
+
+    card.innerHTML = `
+      <div class="account-type-badge ${acc.type}">${acc.type.charAt(0).toUpperCase() + acc.type.slice(1)}</div>
+      <div class="account-name">${acc.name}</div>
+      <div class="account-institution">${acc.institution}</div>
+      <div class="account-value">${formatCurrency(acc.value)}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  let total = accounts.reduce((s, a) => s + a.value, 0);
+  document.getElementById('net-worth-display').textContent = formatCurrency(total);
+}
+
+function renderExpenses() {
+  const container = document.getElementById('expense-sections');
+  container.innerHTML = '';
+
+  const sections = [
+    { key: 'monthly', title: 'Monthly Household', period: '/mo' },
+    { key: 'tuition', title: 'Annualized Tuition', period: '/yr' },
+    { key: 'donations', title: 'Annualized Donations', period: '/yr' }
+  ];
+
+  sections.forEach(sec => {
+    const items = expenses[sec.key];
+    const total = items.reduce((s, i) => s + (i.value || 0), 0);
+
+    const div = document.createElement('div');
+    div.className = 'expense-section';
+
+    let rowsHTML = items.map(item => `
+      <div class="expense-row">
+        <span class="expense-label">${item.label}</span>
+        <span class="expense-amount">${formatCurrency(item.value)}</span>
+      </div>
+    `).join('');
+
+    div.innerHTML = `
+      <div class="expense-section-header">
+        <span class="expense-section-title">${sec.title}</span>
+        <span class="expense-section-total">${formatCurrency(total)}${sec.period}</span>
+      </div>
+      <div class="expense-items">${rowsHTML}</div>
+      <div class="expense-cta">Please provide us with these numbers so we can figure out the right DCA amount for you.</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function renderRoadmap() {
+  const container = document.getElementById('roadmap-items');
+  container.innerHTML = '';
+
+  roadmapItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'roadmap-item';
+    div.innerHTML = `
+      <div class="roadmap-header">
+        <div class="roadmap-header-left">
+          <span class="roadmap-number">${i + 1}</span>
+          <span class="roadmap-title">${item.title}</span>
+        </div>
+        <svg class="roadmap-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="roadmap-body">
+        <div class="roadmap-body-inner">${item.body}</div>
+      </div>
+    `;
+    div.querySelector('.roadmap-header').addEventListener('click', () => {
+      div.classList.toggle('open');
+    });
+    container.appendChild(div);
+  });
+}
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+
+function triggerReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+}
+
+/* ============================================
+   SMOOTH SCROLL NAV
+   ============================================ */
+
+document.querySelectorAll('.header-nav a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      const offset = 90;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+    document.querySelectorAll('.header-nav a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+window.addEventListener('scroll', () => {
+  const sections = ['actions', 'portfolio', 'accounts', 'budget', 'roadmap'];
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 150) current = id;
+  });
+  document.querySelectorAll('.header-nav a').forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+});
+
+/* ============================================
+   INIT
+   ============================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderActionItems();
+  renderPortfolio();
+  renderAccounts();
+  renderExpenses();
+  renderRoadmap();
+  triggerReveal();
+});
+</script>
+
+</body>
+</html>
